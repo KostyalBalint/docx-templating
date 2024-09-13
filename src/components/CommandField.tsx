@@ -11,6 +11,7 @@ export const CommandField = (props: CommandFieldProps) => {
       size="small"
       label={props.code}
       variant="outlined"
+      fullWidth
       onChange={(event) => props.onChange(event.target.value)}
     />
   );

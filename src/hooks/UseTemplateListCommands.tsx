@@ -9,7 +9,7 @@ export const useTemplateListCommands = (
 
   useEffect(() => {
     templateFile.arrayBuffer().then((buffer) => {
-      listCommands(buffer, ["[", "]"]).then((cmds) => {
+      listCommands(buffer, ["{", "}"]).then((cmds) => {
         setCommands(cmds);
       });
     });

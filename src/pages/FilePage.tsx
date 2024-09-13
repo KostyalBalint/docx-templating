@@ -17,14 +17,14 @@ export const FilePage: FC = () => {
         Document Template Engine
       </Typography>
       <Grid container direction="row" spacing={2} justifyContent="center">
-        <Grid item xs={3}>
+        <Grid item xs={4}>
           <Paper sx={{ p: 2 }}>
             {!file && <Typography>No Document Selected</Typography>}
             {file && <TemplateFillList templateFile={file} />}
           </Paper>
         </Grid>
 
-        <Grid item xs={9}>
+        <Grid item xs={8}>
           <Paper sx={{ p: 2, height: "100%" }}>
             <DocumentPanel setFile={setFile} file={file} />
           </Paper>

@@ -1,4 +1,4 @@
-import { FC, useCallback, useState } from "react";
+import { FC, useCallback, useEffect, useState } from "react";
 import { Alert, Box, Button, Grid, Stack, Typography } from "@mui/material";
 import { useTemplateListCommands } from "../hooks/UseTemplateListCommands.tsx";
 import { CommandField } from "./CommandField.tsx";
@@ -14,20 +14,34 @@ const findDuplicates = <T,>(arr: T[]) =>
 
 export const TemplateFillList: FC<TemplateFillListProps> = (props) => {
   const commands = useTemplateListCommands(props.templateFile);
+  const { enqueueSnackbar } = useSnackbar();
+  const [commandValues, setCommandValues] = useState<Record<
+    string,
+    string
+  > | null>(null);
+
   const insertCommands = commands?.filter((command) => command.type === "INS");
 
-  const [commandValues, setCommandValues] = useState<Record<string, string>>(
-    {},
-  );
-
-  const { enqueueSnackbar } = useSnackbar();
+  useEffect(() => {
+    if (commandValues === null) {
+      setCommandValues(
+        insertCommands?.reduce((prev, current) => {
+          return {
+            ...prev,
+            [current.code]: "",
+          };
+        }, {}) ?? {},
+      );
+    }
+  }, [insertCommands]);
 
   const generateDoc = useCallback(async () => {
     try {
       const generated = await createReport({
         template: new Uint8Array(await props.templateFile.arrayBuffer()),
+        noSandbox: true,
         data: commandValues,
-        cmdDelimiter: ["[", "]"],
+        cmdDelimiter: ["{", "}"],
       });
       const blob = new Blob([generated], { type: props.templateFile.type });
       const url = URL.createObjectURL(blob);
