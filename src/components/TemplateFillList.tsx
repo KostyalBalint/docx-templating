@@ -55,6 +55,7 @@ export const TemplateFillList: FC<TemplateFillListProps> = (props) => {
   }, [commandValues]);
 
   const duplicates = findDuplicates(insertCommands?.map((c) => c.code) ?? []);
+  const uniqueFields = [...new Set(insertCommands?.map((c) => c.code))];
 
   return (
     <Stack gap={2}>
@@ -67,15 +68,15 @@ export const TemplateFillList: FC<TemplateFillListProps> = (props) => {
       )}
 
       <Grid container spacing={1}>
-        {insertCommands?.map((command, id) => (
-          <Grid item key={command.code + id} xs={12}>
+        {uniqueFields.map((code, id) => (
+          <Grid item key={code + id} xs={12}>
             <CommandField
-              code={command.code}
+              code={code}
               id={id}
               onChange={(value) => {
                 setCommandValues((allValues) => ({
                   ...allValues,
-                  [command.code]: value,
+                  [code]: value,
                 }));
               }}
             />
