@@ -34,7 +34,6 @@ export const FilePage: FC = () => {
         </Grid>
         <Grid item xs={4}>
           <Paper sx={{ p: 2 }}>
-            {!templateFile && <Typography>No Document Selected</Typography>}
             <TemplateFillList />
           </Paper>
         </Grid>

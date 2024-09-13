@@ -29,6 +29,10 @@ export const TemplateFillList: FC = () => {
   const duplicates = findDuplicates(commands?.map((c) => c.code) ?? []);
   const uniqueFields = [...new Set(commands?.map((c) => c.code))];
 
+  if (!templateFile) {
+    return <Typography>No Document Selected</Typography>;
+  }
+
   return (
     <Stack gap={2}>
       <Typography>All the fields parsed from the template</Typography>
