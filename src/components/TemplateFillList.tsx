@@ -1,61 +1,65 @@
-import { FC, useCallback, useEffect, useState } from "react";
+import { FC, useCallback, useState } from "react";
 import { Alert, Box, Button, Grid, Stack, Typography } from "@mui/material";
 import { useTemplateListCommands } from "../hooks/UseTemplateListCommands.tsx";
 import { CommandField } from "./CommandField.tsx";
 import createReport from "docx-templates";
 import { useSnackbar } from "notistack";
+import { templateFileName } from "../helpers/templateFileName.ts";
+import { findDuplicates } from "../helpers/findDuplicates.tsx";
+import { CommandSummary } from "docx-templates/lib/types";
 
 type TemplateFillListProps = {
   templateFile: File;
 };
 
-const findDuplicates = <T,>(arr: T[]) =>
-  arr.filter((item, index) => arr.indexOf(item) !== index);
+const fillEmptyCommands = (commands: CommandSummary[]) => {
+  return commands?.reduce((prev, current) => {
+    return {
+      ...prev,
+      [current.code]: "",
+    };
+  }, {});
+};
 
 export const TemplateFillList: FC<TemplateFillListProps> = (props) => {
   const commands = useTemplateListCommands(props.templateFile);
   const { enqueueSnackbar } = useSnackbar();
-  const [commandValues, setCommandValues] = useState<Record<
-    string,
-    string
-  > | null>(null);
-
-  const insertCommands = commands?.filter((command) => command.type === "INS");
-
-  useEffect(() => {
-    if (commandValues === null) {
-      setCommandValues(
-        insertCommands?.reduce((prev, current) => {
-          return {
-            ...prev,
-            [current.code]: "",
-          };
-        }, {}) ?? {},
-      );
-    }
-  }, [insertCommands]);
+  const [commandValues, setCommandValues] = useState<Record<string, string>>(
+    {},
+  );
 
   const generateDoc = useCallback(async () => {
     try {
+      const emptyObj = fillEmptyCommands(commands ?? []);
+      console.log({ ...emptyObj, ...commandValues });
       const generated = await createReport({
         template: new Uint8Array(await props.templateFile.arrayBuffer()),
         noSandbox: true,
-        data: commandValues,
+        data: { ...emptyObj, ...commandValues },
         cmdDelimiter: ["{", "}"],
       });
       const blob = new Blob([generated], { type: props.templateFile.type });
       const url = URL.createObjectURL(blob);
-      window.open(url);
+      const link = document.createElement("a");
+      link.href = url;
+      const newFileName = templateFileName(
+        props.templateFile.name,
+        commandValues,
+      );
+      link.download = newFileName || "generated.docx";
+      link.click();
+
+      URL.revokeObjectURL(url);
     } catch (e) {
       enqueueSnackbar({
         message: e instanceof Error ? e.message : "Error while generating DocX",
         variant: "error",
       });
     }
-  }, [commandValues]);
+  }, [commandValues, commands]);
 
-  const duplicates = findDuplicates(insertCommands?.map((c) => c.code) ?? []);
-  const uniqueFields = [...new Set(insertCommands?.map((c) => c.code))];
+  const duplicates = findDuplicates(commands?.map((c) => c.code) ?? []);
+  const uniqueFields = [...new Set(commands?.map((c) => c.code))];
 
   return (
     <Stack gap={2}>

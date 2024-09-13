@@ -10,7 +10,8 @@ export const useTemplateListCommands = (
   useEffect(() => {
     templateFile.arrayBuffer().then((buffer) => {
       listCommands(buffer, ["{", "}"]).then((cmds) => {
-        setCommands(cmds);
+        const insertCommands = cmds?.filter((cmd) => cmd.type === "INS");
+        setCommands(insertCommands ?? null);
       });
     });
   }, [templateFile]);
