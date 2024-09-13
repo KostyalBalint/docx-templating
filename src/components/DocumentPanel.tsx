@@ -26,6 +26,7 @@ const TemplateSelectList: FC<{ setFile: (file: File) => void }> = (props) => {
       <Autocomplete
         fullWidth
         disablePortal
+        // @ts-ignore
         options={Object.keys(templates).map((t) => t.split("/").at(-1))}
         onChange={async (_, value) => {
           if (value) {
