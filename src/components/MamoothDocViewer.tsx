@@ -1,5 +1,6 @@
 import { FC, useEffect, useState } from "react";
 import mammoth from "mammoth";
+import { Box, Divider, Typography } from "@mui/material";
 
 type DocViewProps = {
   file: File;
@@ -26,19 +27,17 @@ export const MamoothDocViewer: FC<DocViewProps> = ({ file }) => {
     }
   }, [file]);
   return (
-    <div>
-      <h2>{file.name} (DOCX)</h2>
+    <Box>
+      <Typography variant="body1">{file.name}</Typography>
+      <Divider />
       <div
         className="doc-viewer"
         dangerouslySetInnerHTML={{ __html: html }}
         style={{
           width: "100%",
-          height: "600px",
-          border: "1px solid #ccc",
-          padding: "10px",
           overflow: "auto",
         }}
       />
-    </div>
+    </Box>
   );
 };
