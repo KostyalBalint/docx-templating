@@ -1,7 +1,8 @@
-import { ThemeProvider } from "@mui/material";
+import { Box, ThemeProvider } from "@mui/material";
 import theme from "./theme.ts";
 import { FilePage } from "./pages/FilePage.tsx";
 import { SnackbarProvider } from "notistack";
+import { grey } from "@mui/material/colors";
 
 function App() {
   return (
@@ -13,7 +14,13 @@ function App() {
           horizontal: "right",
         }}
       >
-        <FilePage />
+        <Box
+          sx={{
+            backgroundColor: grey[200],
+          }}
+        >
+          <FilePage />
+        </Box>
       </SnackbarProvider>
     </ThemeProvider>
   );

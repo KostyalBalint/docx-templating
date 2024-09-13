@@ -28,7 +28,9 @@ export const MamoothDocViewer: FC<DocViewProps> = ({ file }) => {
   }, [file]);
   return (
     <Box>
-      <Typography variant="body1">{file.name}</Typography>
+      <Typography variant="h5" component="p">
+        {file.name}
+      </Typography>
       <Divider />
       <div
         className="doc-viewer"

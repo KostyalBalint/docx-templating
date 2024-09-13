@@ -8,6 +8,7 @@ type CommandFieldProps = {
 export const CommandField = (props: CommandFieldProps) => {
   return (
     <TextField
+      multiline
       size="small"
       label={props.code}
       variant="outlined"

@@ -1,8 +1,9 @@
 import { FC, useState } from "react";
 import { StyledContainer } from "../components/StyledContainer.tsx";
-import { Grid, Paper, Typography } from "@mui/material";
+import { Button, Grid, Paper, Typography } from "@mui/material";
 import { DocumentPanel } from "../components/DocumentPanel.tsx";
 import { TemplateFillList } from "../components/TemplateFillList.tsx";
+import { IoIosArrowBack } from "react-icons/io";
 
 export const FilePage: FC = () => {
   const [file, setFile] = useState<File | null>(null);
@@ -10,13 +11,26 @@ export const FilePage: FC = () => {
   return (
     <StyledContainer
       sx={{
-        height: "100vh",
+        minHeight: "100vh",
       }}
     >
-      <Typography variant="h4" component="h1" textAlign="center" gutterBottom>
-        Document Template Engine
-      </Typography>
       <Grid container direction="row" spacing={2} justifyContent="center">
+        <Grid item xs={12}>
+          <Paper sx={{ p: 2 }}>
+            <Button
+              startIcon={<IoIosArrowBack />}
+              variant="contained"
+              sx={{ justifySelf: "start", float: "left" }}
+              disabled={!file}
+              onClick={() => setFile(null)}
+            >
+              Back
+            </Button>
+            <Typography variant="h4" component="h1" textAlign="center">
+              Document Template Engine
+            </Typography>
+          </Paper>
+        </Grid>
         <Grid item xs={4}>
           <Paper sx={{ p: 2 }}>
             {!file && <Typography>No Document Selected</Typography>}
