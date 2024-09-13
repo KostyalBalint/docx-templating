@@ -2,13 +2,9 @@ import { FC } from "react";
 import Dropzone from "react-dropzone";
 import { DropzoneContainer } from "./DropzoneContainer.tsx";
 import { Autocomplete, Box, Stack, TextField, Typography } from "@mui/material";
-import { MamoothDocViewer } from "./MamoothDocViewer.tsx";
+import { MamoothDocViewer } from "./DocView/MamoothDocViewer.tsx";
 import { useSnackbar } from "notistack";
-
-type DocumentPanelProps = {
-  setFile: (file: File) => void;
-  file: File | null;
-};
+import { useTemplate } from "../context/TemplateContext.tsx";
 
 const TemplateSelectList: FC<{ setFile: (file: File) => void }> = (props) => {
   //const templates = import.meta.glob("/src/assets/templates/*.docx");
@@ -61,15 +57,25 @@ const TemplateSelectList: FC<{ setFile: (file: File) => void }> = (props) => {
   );
 };
 
-export const DocumentPanel: FC<DocumentPanelProps> = ({ file, setFile }) => {
+export const DocumentPanel: FC = () => {
+  const { templateFile, setTemplateFile, compiledTemplate, compiledFileName } =
+    useTemplate();
+
   const handleDrop = (acceptedFiles: File[]) => {
-    setFile(acceptedFiles[0]);
+    setTemplateFile(acceptedFiles[0]);
   };
 
-  if (!file) {
+  if (!templateFile) {
     return (
       <Stack gap={2}>
-        <Dropzone onDrop={handleDrop} multiple={false}>
+        <Dropzone
+          onDrop={handleDrop}
+          multiple={false}
+          accept={{
+            "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
+              [".docx"],
+          }}
+        >
           {({ getRootProps, getInputProps }) => (
             <DropzoneContainer {...getRootProps()}>
               <input {...getInputProps()} />
@@ -79,10 +85,15 @@ export const DocumentPanel: FC<DocumentPanelProps> = ({ file, setFile }) => {
             </DropzoneContainer>
           )}
         </Dropzone>
-        <TemplateSelectList setFile={setFile} />
+        <TemplateSelectList setFile={setTemplateFile} />
       </Stack>
     );
   } else {
-    return <MamoothDocViewer file={file} />;
+    return (
+      <MamoothDocViewer
+        file={compiledTemplate ?? templateFile}
+        fileName={compiledFileName ?? templateFile.name}
+      />
+    );
   }
 };

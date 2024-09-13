@@ -5,7 +5,7 @@ import { grey, red } from "@mui/material/colors";
 const theme = createTheme({
   typography: {
     fontFamily: "Roboto, Public Sans, sans-serif",
-    fontSize: 12,
+    //fontSize: 12,
     fontWeightRegular: 200,
     fontWeightMedium: 500,
     fontWeightBold: 700,

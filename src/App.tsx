@@ -3,6 +3,8 @@ import theme from "./theme.ts";
 import { FilePage } from "./pages/FilePage.tsx";
 import { SnackbarProvider } from "notistack";
 import { grey } from "@mui/material/colors";
+import { TemplateProvider } from "./context/TemplateContext.tsx";
+import { Footer } from "./components/Footer.tsx";
 
 function App() {
   return (
@@ -14,13 +16,16 @@ function App() {
           horizontal: "right",
         }}
       >
-        <Box
-          sx={{
-            backgroundColor: grey[200],
-          }}
-        >
-          <FilePage />
-        </Box>
+        <TemplateProvider>
+          <Box
+            sx={{
+              backgroundColor: grey[200],
+            }}
+          >
+            <FilePage />
+          </Box>
+          <Footer />
+        </TemplateProvider>
       </SnackbarProvider>
     </ThemeProvider>
   );

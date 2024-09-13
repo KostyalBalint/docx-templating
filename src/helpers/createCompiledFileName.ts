@@ -1,4 +1,4 @@
-export const templateFileName = (
+export const createCompiledFileName = (
   name: string,
   commandValues: Record<string, string> | null,
 ) => {

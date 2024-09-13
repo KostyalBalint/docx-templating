@@ -1,12 +1,14 @@
 import { FC, useEffect, useState } from "react";
 import mammoth from "mammoth";
 import { Box, Divider, Typography } from "@mui/material";
+import "./mamooth.css";
 
 type DocViewProps = {
   file: File;
+  fileName: string;
 };
 
-export const MamoothDocViewer: FC<DocViewProps> = ({ file }) => {
+export const MamoothDocViewer: FC<DocViewProps> = ({ file, fileName }) => {
   const [html, setHtml] = useState("");
   useEffect(() => {
     if (file) {
@@ -29,7 +31,7 @@ export const MamoothDocViewer: FC<DocViewProps> = ({ file }) => {
   return (
     <Box>
       <Typography variant="h5" component="p">
-        {file.name}
+        {fileName}
       </Typography>
       <Divider />
       <div

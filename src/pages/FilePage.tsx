@@ -1,12 +1,13 @@
-import { FC, useState } from "react";
+import { FC } from "react";
 import { StyledContainer } from "../components/StyledContainer.tsx";
 import { Button, Grid, Paper, Typography } from "@mui/material";
 import { DocumentPanel } from "../components/DocumentPanel.tsx";
 import { TemplateFillList } from "../components/TemplateFillList.tsx";
 import { IoIosArrowBack } from "react-icons/io";
+import { useTemplate } from "../context/TemplateContext.tsx";
 
 export const FilePage: FC = () => {
-  const [file, setFile] = useState<File | null>(null);
+  const { templateFile, setTemplateFile } = useTemplate();
 
   return (
     <StyledContainer
@@ -21,8 +22,8 @@ export const FilePage: FC = () => {
               startIcon={<IoIosArrowBack />}
               variant="contained"
               sx={{ justifySelf: "start", float: "left" }}
-              disabled={!file}
-              onClick={() => setFile(null)}
+              disabled={!templateFile}
+              onClick={() => setTemplateFile(null)}
             >
               Back
             </Button>
@@ -33,14 +34,14 @@ export const FilePage: FC = () => {
         </Grid>
         <Grid item xs={4}>
           <Paper sx={{ p: 2 }}>
-            {!file && <Typography>No Document Selected</Typography>}
-            {file && <TemplateFillList templateFile={file} />}
+            {!templateFile && <Typography>No Document Selected</Typography>}
+            <TemplateFillList />
           </Paper>
         </Grid>
 
         <Grid item xs={8}>
-          <Paper sx={{ p: 2, height: "100%" }}>
-            <DocumentPanel setFile={setFile} file={file} />
+          <Paper sx={{ p: 2 }}>
+            <DocumentPanel />
           </Paper>
         </Grid>
       </Grid>
