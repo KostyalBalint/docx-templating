@@ -14,7 +14,7 @@ export const Footer = () => {
         color: "white",
         height: 40,
         mt: "auto", // This pushes the footer to the bottom
-        p: 2,
+        py: 2,
         width: "100%",
       }}
     >
